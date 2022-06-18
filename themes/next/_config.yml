@@ -179,7 +179,6 @@ site_state: true
 social:
   GitHub: https://github.com/caffptrx || fab fa-github
   E-Mail: mailto:viodsystem0@outlook.com || fa fa-envelope
-  Bilibili: https://space.bilibili.com/258950848 || fa fa-tv
   RSS: /atom.xml || fa fa-rss
   #Weibo: https://weibo.com/yourname || fab fa-weibo
   #Google: https://plus.google.com/yourname || fab fa-google
