@@ -6,7 +6,7 @@
   <link href="http://caffptrx.github.io/atom.xml" rel="self"/>
   
   <link href="http://caffptrx.github.io/"/>
-  <updated>2022-05-14T04:50:16.738Z</updated>
+  <updated>2022-06-18T05:18:03.632Z</updated>
   <id>http://caffptrx.github.io/</id>
   
   <author>
@@ -17,11 +17,35 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>OpenAIE</title>
+    <link href="http://caffptrx.github.io/2022/06/18/OpenAIE/"/>
+    <id>http://caffptrx.github.io/2022/06/18/OpenAIE/</id>
+    <published>2022-06-18T05:13:13.000Z</published>
+    <updated>2022-06-18T05:18:03.632Z</updated>
+    
+    <content type="html"><![CDATA[<p>1、主控板<br>主要技术参数为：双核处理器，主频为133MHz；存储为4MB Flash以及264KB SRAM；集成2.4英寸、分辨率为320<em>240的IPS全视角液晶显示屏；板载两个用户按键与一个无源蜂鸣器；板上提供8个HY2.0-4P（Grove标准）拓展模块接口；采用USB TypeC（DC: 5V）接口进行数据传输，以及进行供电；支持MicroPython编程和图形化编程。<br>2、基础电子模块<br>按键组、电位器、温湿度传感器、可编程全彩LED、超声波测距传感器、电机风扇<br>3、语音识别及交互模块<br>通信接口为I2C，带反馈音功能，命令词固定，可通过语音对话学习添加唤醒词和命令词（最多16个）。<br>4、AI启蒙视觉模块<br>采用RISC-V 64位双核处理器，主频400MHz，集成卷积神经网络硬件加速器，可高效进行卷积神经网络运算；<br>板上存储为16MiB Flash，8MiB SRAM，集成SD卡座，支持存储拓展；<br>集成的图像传感器为200万像素彩色摄像头，显示屏为2.0英寸、分辨率240</em>320、IPS全视角彩色显示屏；<br>集成有语音采集处理、语音识别芯片，支持实时ASR非特定人连续语音识别；<br>板上集成三轴陀螺仪、三轴加速度计、光照强度传感器、PWM调节灯、蜂鸣器、双按键、LED灯模组等电子模块；<br>板上固化有计算机视觉、语音识别、深度学习卷积神经网络库、图形编程及海龟画图库、板上硬件控制等Python编程库，提供开发调用接口案例。支持Yolo、Mobilenet等流行卷积神经网络模型。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;1、主控板&lt;br&gt;主要技术参数为：双核处理器，主频为133MHz；存储为4MB Flash以及264KB SRAM；集成2.4英寸、分辨率为320&lt;em&gt;240的IPS全视角液晶显示屏；板载两个用户按键与一个无源蜂鸣器；板上提供8个HY2.0-4P（Grove标准）拓展模块</summary>
+      
+    
+    
+    
+    <category term="套件" scheme="http://caffptrx.github.io/categories/%E5%A5%97%E4%BB%B6/"/>
+    
+    
+    <category term="Python" scheme="http://caffptrx.github.io/tags/Python/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Search Icon 问题</title>
     <link href="http://caffptrx.github.io/2022/05/14/search-icon-problem/"/>
     <id>http://caffptrx.github.io/2022/05/14/search-icon-problem/</id>
     <published>2022-05-14T03:59:55.000Z</published>
-    <updated>2022-05-14T04:50:16.738Z</updated>
+    <updated>2022-06-18T05:13:35.864Z</updated>
     
     <content type="html"><![CDATA[<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>在使用 Local Search 时，搜索图标会遇到这种问题</p><img src="/2022/05/14/search-icon-problem/prob-pic.png" class="" title="一直转圈的图标"><h1 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h1><p>在博客根目录下的 <code>_config.yml</code> 修改配置</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">search:</span><br><span class="line">  path: search.json // 官方教程的文件名为 search.xml，这就是错误点</span><br><span class="line">  field: post</span><br><span class="line">  format: html</span><br><span class="line">  limit: 10000</span><br></pre></td></tr></table></figure><h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>]]></content>
     
