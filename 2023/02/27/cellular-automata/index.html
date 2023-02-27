@@ -22,30 +22,33 @@
     var CONFIG = {"hostname":"caffptrx.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="深圳初三狗">
-<meta property="og:type" content="website">
-<meta property="og:title" content="介草稻">
-<meta property="og:url" content="http://caffptrx.github.io/index.html">
+  <meta name="description" content="原题来自于中国地质大学。  题目概括在 $N*N$ 的棋盘中，每个格子都可以看成是一个生命体，每个生命体的生死遵循以下规则:  如果一个细胞周围有 3 个细胞为生，则该细胞为生； 如果一个细胞周围有 2 个细胞为生，则该细胞的生死状态保持不变； 在其它情况下，该细胞为死。请让玩家输入棋盘大小与初始存活概率，用 * 和（空格）表达生与死，并输出每一轮迭代后的图像。思路利用若干个函数分解功能，在这我">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自动元胞机">
+<meta property="og:url" content="http://caffptrx.github.io/2023/02/27/cellular-automata/index.html">
 <meta property="og:site_name" content="介草稻">
-<meta property="og:description" content="深圳初三狗">
+<meta property="og:description" content="原题来自于中国地质大学。  题目概括在 $N*N$ 的棋盘中，每个格子都可以看成是一个生命体，每个生命体的生死遵循以下规则:  如果一个细胞周围有 3 个细胞为生，则该细胞为生； 如果一个细胞周围有 2 个细胞为生，则该细胞的生死状态保持不变； 在其它情况下，该细胞为死。请让玩家输入棋盘大小与初始存活概率，用 * 和（空格）表达生与死，并输出每一轮迭代后的图像。思路利用若干个函数分解功能，在这我">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-27T14:57:29.000Z">
+<meta property="article:modified_time" content="2023-02-27T15:23:01.734Z">
 <meta property="article:author" content="caffx">
+<meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://caffptrx.github.io/">
+<link rel="canonical" href="http://caffptrx.github.io/2023/02/27/cellular-automata/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>介草稻</title>
+  <title>自动元胞机 | 介草稻</title>
   
 
 
@@ -184,9 +187,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -202,10 +206,9 @@
       <meta itemprop="name" content="介草稻">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/02/27/cellular-automata/" class="post-title-link" itemprop="url">自动元胞机</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          自动元胞机
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -228,6 +231,13 @@
             </span>
 
           
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
 
         </div>
       </header>
@@ -238,7 +248,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <blockquote>
+        <blockquote>
 <p>原题来自于中国地质大学。</p>
 </blockquote>
 <h2 id="题目概括"><a href="#题目概括" class="headerlink" title="题目概括"></a>题目概括</h2><p>在 $N*N$ 的棋盘中，每个格子都可以看成是一个生命体，每个生命体的生死遵循以下规则:</p>
@@ -248,620 +258,74 @@
 <li>在其它情况下，该细胞为死。<br>请让玩家输入棋盘大小与初始存活概率，用 * 和（空格）表达生与死，并输出每一轮迭代后的图像。<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2>利用若干个函数分解功能，在这我用 init() 初始化棋盘，print_screen() 打印棋盘，get_nearby_cells_count() 处理每个格子相邻生命体存活的计算，最后利用 update() 更新状态。<br>对于 init() 来说，只要注意嵌套关系与 life_prob 的计算方式就行。<br>print_screen() 更简单了，我用了 | 来美化棋盘格。<br>get_nearby_cells_count() 才是重头戏，先将棋盘作为参数传入，计算宽和高，利用$(i, j)$表示每个棋盘格的位置，再判断其是否在边缘 (30-39)，最后计算相邻。<br>update() 用 deepcopy() 复制一份 screen (防止某些特殊情况出现)，根据 get_nearby_cells_count() 计算的结果更新棋盘格。<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random, copy</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">init</span>(<span class="params">life_prob</span>):</span><br><span class="line">    outlayer, inlayer = [], []</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(height):</span><br><span class="line">        <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(width):</span><br><span class="line">            prob = random.random()</span><br><span class="line">            <span class="keyword">if</span> prob &gt; life_prob:</span><br><span class="line">                inlayer.append(<span class="string">&#x27; &#x27;</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                inlayer.append(<span class="string">&#x27;*&#x27;</span>)</span><br><span class="line">        outlayer.append(inlayer)</span><br><span class="line">        inlayer = []</span><br><span class="line">    <span class="keyword">return</span> outlayer</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">print_screen</span>():</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> screen:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;|&quot;</span>, end=<span class="string">&quot;&quot;</span>)</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> i:</span><br><span class="line">            <span class="built_in">print</span>(j, end=<span class="string">&quot;&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;|&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_nearby_cells_count</span>(<span class="params">screen, i, j</span>):</span><br><span class="line">    w, h, count = <span class="built_in">len</span>(screen[<span class="number">0</span>]) - <span class="number">1</span>, <span class="built_in">len</span>(screen) - <span class="number">1</span>, <span class="number">0</span></span><br><span class="line">    i, j = i - <span class="number">1</span>, j - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    top_exist, bottom_exist, left_exist, right_exist = <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> i - <span class="number">1</span> &gt;= <span class="number">0</span>:</span><br><span class="line">        top_exist = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">if</span> i + <span class="number">1</span> &lt;= h:</span><br><span class="line">        bottom_exist = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">if</span> j - <span class="number">1</span> &gt;= <span class="number">0</span>:</span><br><span class="line">        left_exist = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">if</span> j + <span class="number">1</span> &lt;= w:</span><br><span class="line">        right_exist = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> top_exist:</span><br><span class="line">        <span class="keyword">if</span> screen[i - <span class="number">1</span>][j] == <span class="string">&#x27;*&#x27;</span>:</span><br><span class="line">            count += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> left_exist:</span><br><span class="line">            <span class="keyword">if</span> screen[i - <span class="number">1</span>][j - <span class="number">1</span>] == <span class="string">&#x27;*&#x27;</span>:</span><br><span class="line">                count += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> right_exist:</span><br><span class="line">            <span class="keyword">if</span> screen[i - <span class="number">1</span>][j + <span class="number">1</span>] == <span class="string">&#x27;*&#x27;</span>:</span><br><span class="line">                count += <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> bottom_exist:</span><br><span class="line">        <span class="keyword">if</span> screen[i + <span class="number">1</span>][j] == <span class="string">&#x27;*&#x27;</span>:</span><br><span class="line">            count += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> left_exist:</span><br><span class="line">            <span class="keyword">if</span> screen[i + <span class="number">1</span>][j - <span class="number">1</span>] == <span class="string">&#x27;*&#x27;</span>:</span><br><span class="line">                count += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> right_exist:</span><br><span class="line">            <span class="keyword">if</span> screen[i + <span class="number">1</span>][j + <span class="number">1</span>] == <span class="string">&#x27;*&#x27;</span>:</span><br><span class="line">                count += <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> left_exist:</span><br><span class="line">        <span class="keyword">if</span> screen[i][j - <span class="number">1</span>] == <span class="string">&#x27;*&#x27;</span>:</span><br><span class="line">            count += <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> right_exist:</span><br><span class="line">        <span class="keyword">if</span> screen[i][j + <span class="number">1</span>] == <span class="string">&#x27;*&#x27;</span>:</span><br><span class="line">            count += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> count</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">update</span>(<span class="params">screen</span>):</span><br><span class="line">    new_screen = copy.deepcopy(screen)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, height + <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, width + <span class="number">1</span>):</span><br><span class="line">            evi = get_nearby_cells_count(screen, i, j)</span><br><span class="line">            <span class="keyword">if</span> evi == <span class="number">3</span>:</span><br><span class="line">                new_screen[i - <span class="number">1</span>][j - <span class="number">1</span>] = <span class="string">&#x27;*&#x27;</span></span><br><span class="line">            <span class="keyword">elif</span> evi == <span class="number">2</span>:</span><br><span class="line">                <span class="keyword">pass</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                new_screen[i - <span class="number">1</span>][j - <span class="number">1</span>] = <span class="string">&#x27; &#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> new_screen</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;====元胞自动机====\n作者: caffx&#x27;</span>)</span><br><span class="line">height = <span class="built_in">int</span>(<span class="built_in">input</span>(<span class="string">&quot;高度: &quot;</span>))</span><br><span class="line">width = <span class="built_in">int</span>(<span class="built_in">input</span>(<span class="string">&quot;宽度: &quot;</span>))</span><br><span class="line">life_prob = <span class="built_in">float</span>(<span class="built_in">input</span>(<span class="string">&quot;空间中初始细胞存活概率(0.x): &quot;</span>))</span><br><span class="line">screen = init(life_prob)</span><br><span class="line">count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;第 %d 次迭代&quot;</span> % (count))</span><br><span class="line">    print_screen()</span><br><span class="line">    q = <span class="built_in">input</span>()</span><br><span class="line">    <span class="keyword">if</span> q == <span class="string">&quot;q&quot;</span>:</span><br><span class="line">        exit()</span><br><span class="line">    screen = update(screen)</span><br><span class="line">    count += <span class="number">1</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
 </ol>
 
-      
     </div>
 
     
     
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+    <script src="//sdk.jinrishici.com/v2/browser/jinrishici.js"></script>
+<script>
+  jinrishici.load((result) => {
+    let jrsc = document.getElementById('jrsc');
+    const data = result.data;
+    let author = data.origin.author;
+    let title = '《' + data.origin.title + '》';
+    let content = data.content.substr(0, data.content.length - 1);
+    let dynasty = data.origin.dynasty.substr(0, data.origin.dynasty.length - 1);
+    jrsc.innerText = content + ' @ ' + dynasty + '·' + author + title;
+  });
+</script>
+<div style="text-align: center"><span id="jrsc" >正在加载今日诗词....</span></div>
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://caffptrx.github.io/2022/06/18/OpenAIE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="caffx">
-      <meta itemprop="description" content="深圳初三狗">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="介草稻">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/06/18/OpenAIE/" class="post-title-link" itemprop="url">OpenAIE</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-06-18 13:13:13 / 修改时间：14:52:13" itemprop="dateCreated datePublished" datetime="2022-06-18T13:13:13+08:00">2022-06-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%A5%97%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">套件</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="板载按键"><a href="#板载按键" class="headerlink" title="板载按键"></a>板载按键</h1><p><em>板载两个用户按键 button1 和 button2，按键按下为低电平，弹起为高电平。</em></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> openaie <span class="keyword">import</span> button1, button2</span><br><span class="line">button1.is_press()</span><br><span class="line">button2.is_press()</span><br></pre></td></tr></table></figure>
-<p>按键按下返回 True，按键弹起返回 False。</p>
-<h1 id="板载无源蜂鸣器"><a href="#板载无源蜂鸣器" class="headerlink" title="板载无源蜂鸣器"></a>板载无源蜂鸣器</h1><p>可通过不同频率的信号驱动，发出不同音调的声音。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> openaie <span class="keyword">import</span> buzzer</span><br><span class="line">buzzer.tone(freq)</span><br><span class="line">buzzer.no_tone()</span><br></pre></td></tr></table></figure>
-<p>freq: 频率。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/06/18/OpenAIE/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>caffx
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://caffptrx.github.io/2023/02/27/cellular-automata/" title="自动元胞机">http://caffptrx.github.io/2023/02/27/cellular-automata/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+          </div>
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://caffptrx.github.io/2022/05/14/search-icon-problem/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="caffx">
-      <meta itemprop="description" content="深圳初三狗">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="介草稻">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/14/search-icon-problem/" class="post-title-link" itemprop="url">Search Icon 问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-05-14 11:59:55" itemprop="dateCreated datePublished" datetime="2022-05-14T11:59:55+08:00">2022-05-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-18 13:13:35" itemprop="dateModified" datetime="2022-06-18T13:13:35+08:00">2022-06-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>在使用 Local Search 时，搜索图标会遇到这种问题</p>
-<img src="/2022/05/14/search-icon-problem/prob-pic.png" class="" title="一直转圈的图标">
-<h1 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h1><p>在博客根目录下的 <code>_config.yml</code> 修改配置</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">search:</span><br><span class="line">  path: search.json // 官方教程的文件名为 search.xml，这就是错误点</span><br><span class="line">  field: post</span><br><span class="line">  format: html</span><br><span class="line">  limit: 10000</span><br></pre></td></tr></table></figure>
-<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://caffptrx.github.io/2022/05/12/lc118/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="caffx">
-      <meta itemprop="description" content="深圳初三狗">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="介草稻">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/12/lc118/" class="post-title-link" itemprop="url">Leetcode P118</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-05-12 23:03:15" itemprop="dateCreated datePublished" datetime="2022-05-12T23:03:15+08:00">2022-05-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-14 11:34:38" itemprop="dateModified" datetime="2022-05-14T11:34:38+08:00">2022-05-14</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="问题概括"><a href="#问题概括" class="headerlink" title="问题概括"></a>问题概括</h2><p>给定一个非负整数 <code>numRows</code>，生成杨辉三角的前<code>numRows</code>行。</p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>杨辉三角的前两行是固定的（意思为从第三行起中间的数是可以通过计算得出的），通过一个循环生成行，再利用另外一个循环生成数字。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/05/12/lc118/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://caffptrx.github.io/2021/11/06/lc121/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="caffx">
-      <meta itemprop="description" content="深圳初三狗">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="介草稻">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/06/lc121/" class="post-title-link" itemprop="url">Leetcode P121</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-11-06 00:23:42" itemprop="dateCreated datePublished" datetime="2021-11-06T00:23:42+08:00">2021-11-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-14 11:36:30" itemprop="dateModified" datetime="2022-05-14T11:36:30+08:00">2022-05-14</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="问题概括"><a href="#问题概括" class="headerlink" title="问题概括"></a>问题概括</h2><p>给定一个数组 <code>prices</code>，它的第 <code>i</code> 个元素 <code>prices[i]</code> 表示一支给定股票第 <code>i</code> 天的价格。</p>
-<p>你只能选择 <strong>某一天</strong> 买入这只股票，并选择在 <strong>未来的某一个不同的日子</strong> 卖出该股票。设计一个算法来计算你所能获取的最大利润。</p>
-<p>返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 <code>0</code>。</p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
-<li>暴力<br> 我们需要找出给定数组中两个数字之间的最大差值（即最大利润）。此外，第二个数字（卖出价格）必须大于第一个数字（买入价格）。<br> 也就是说对于每组 $i$ 和 $j$（其中 $i &lt; j$），我们需要找出 $\max(prices[j] - prices[i])$。<br /><br> 时间复杂度: $O(n^2)$;<br> 空间复杂度: $O(1)$.</li>
-<li>一次遍历<br> 假设我们在第 <code>i</code> 天卖出股票，且需要最大差值（最大利润），那就是说需要在历史股票中的最低点购买。<br> 在本题中，我们可以使用一个变量 <code>minprice</code> 来记录最低价格，那么我们在第 <code>i</code> 天卖出股票所获得的利润就是 $price[i] - minprice$。<br> 在每一次循环时（每一天）考虑这天卖出股票获得的利润是否是最大的，当遍历完整个给定数组时，我们也就找到了最大利润。<br /><br> 时间复杂度: $O(n)$;<br> 空间复杂度: $O(1)$.</li>
-<li>动态规划 <em>(Dynamic Programming, DP)</em><br> 实际上方法二的思路是由动态规划演变而来的。<br> 因为我们需要始终保持差值最大化（利润最大化），所以 $dp[i]$ 表示前 $i$ 天的最大差值（最大利润），得:$$dp[i] &#x3D; \max(dp[i-1], prices[i] - minprice)$$<br> 时间复杂度: $O(n)$;<br> 空间复杂度: $O(n)$.</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/11/06/lc121/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/18/OpenAIE/" rel="prev" title="OpenAIE">
+      <i class="fa fa-chevron-left"></i> OpenAIE
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://caffptrx.github.io/2021/11/04/ssh/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="caffx">
-      <meta itemprop="description" content="深圳初三狗">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="介草稻">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/04/ssh/" class="post-title-link" itemprop="url">使用 SSH 连接到 GitHub</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-11-04 18:50:42" itemprop="dateCreated datePublished" datetime="2021-11-04T18:50:42+08:00">2021-11-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-14 11:35:51" itemprop="dateModified" datetime="2022-05-14T11:35:51+08:00">2022-05-14</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p style="font-weight: bold; color: #dc143c;">
-注意！本教程的教学环境都基于 Windows 10，但过程大致相同，针对不同的终端，请使用不同的命令完成相同的操作。
-</p>
-
-<h3 id="生成新-SSH-密钥"><a href="#生成新-SSH-密钥" class="headerlink" title="生成新 SSH 密钥"></a>生成新 SSH 密钥</h3><p>在 Git Bash 下输入命令，<strong>将 <a href="mailto:&#121;&#111;&#117;&#114;&#95;&#101;&#x6d;&#97;&#105;&#x6c;&#64;&#x65;&#120;&#97;&#x6d;&#112;&#x6c;&#101;&#46;&#99;&#111;&#x6d;">&#121;&#111;&#117;&#114;&#95;&#101;&#x6d;&#97;&#105;&#x6c;&#64;&#x65;&#120;&#97;&#x6d;&#112;&#x6c;&#101;&#46;&#99;&#111;&#x6d;</a> 替换为你的邮件地址</strong>。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t ed25519 -C &quot;your_email@example.com&quot;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>如果不支持 ED25519 算法，使用以下命令。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -b 4096 -C &quot;your_email@example.com&quot;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<p>如果创建成功，将提示:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; Generating public/private algorithm key pair.</span><br></pre></td></tr></table></figure>
-
-<p>提示 <code>Enter a file in which to save the key.</code> (输入要保存密钥的文件) 时，按 <em>Enter</em> 键，将密钥创建在默认位置。</p>
-<p>出现如下代码时，输入安全密码。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; Enter passphrase (empty for no passphrase):</span><br><span class="line">&gt; Enter same passphrase again:</span><br></pre></td></tr></table></figure>
-<p>连续按下两次 Enter 键将创建空密码。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/11/04/ssh/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://caffptrx.github.io/2021/10/13/lc20/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="caffx">
-      <meta itemprop="description" content="深圳初三狗">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="介草稻">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/13/lc20/" class="post-title-link" itemprop="url">Leetcode P20</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-10-13 10:41:12" itemprop="dateCreated datePublished" datetime="2021-10-13T10:41:12+08:00">2021-10-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-14 11:34:25" itemprop="dateModified" datetime="2022-05-14T11:34:25+08:00">2022-05-14</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="问题概括"><a href="#问题概括" class="headerlink" title="问题概括"></a>问题概括</h2><p>给你一个有序数组 <code>nums</code>，请你 <strong>原地</strong> 删除重复出现的元素，使每个元素 <strong>只出现一次</strong>，返回删除后数组的新长度。</p>
-<p>不要使用额外的数组空间，你必须在使用<code>O(1)</code>额外空间的条件下完成。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/10/13/lc20/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://caffptrx.github.io/2021/10/12/lc2283/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="caffx">
-      <meta itemprop="description" content="深圳初三狗">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="介草稻">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/12/lc2283/" class="post-title-link" itemprop="url">Leetcode P2283</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-10-12 21:33:53" itemprop="dateCreated datePublished" datetime="2021-10-12T21:33:53+08:00">2021-10-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-14 11:35:19" itemprop="dateModified" datetime="2022-05-14T11:35:19+08:00">2022-05-14</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="问题概括"><a href="#问题概括" class="headerlink" title="问题概括"></a>问题概括</h2><p>给定两个字符串 s1 和 s2，请编写一个程序，确定其中一个字符串的字符重新排列后，能否变成另一个字符串。</p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>根据题目可知</p>
-<ol>
-<li>s1 与 s2 的长度应相同</li>
-<li>s1 与 s2 的每个字符出现次数应相同</li>
-<li>s2 无法出现 s1 不包含的字符</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/10/12/lc2283/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
   
 
 
 
           </div>
           
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81NjQxMS8zMjg3NA"></div>
+  </div>
+  
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -908,6 +372,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%A6%82%E6%8B%AC"><span class="nav-number">1.</span> <span class="nav-text">题目概括</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1116,6 +581,21 @@
 
   
 
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
 
 </body>
 </html>
